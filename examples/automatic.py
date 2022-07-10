@@ -7,6 +7,7 @@ import argparse
 import time
 import signal
 import sys
+import datetime
 
 
 parser = argparse.ArgumentParser()
@@ -66,6 +67,14 @@ def get_cpu_temp():
             return t[x][0].current
     print("Warning: Unable to get CPU temperature!")
     return 0
+
+
+def sleep_mode_enabled():
+    # for now hardocoded, will add later
+    current_time = datetime.datetime.now().time()
+    start_sleep_hours = datetime.time(22,0,0)
+    end_sleep_hours = datetime.time(8,0,0)
+    return current_time >= start_sleep_hours or current_time <= end_sleep_hours
 
 
 def get_cpu_freq():
@@ -156,7 +165,7 @@ try:
             if set_fan(enable):
                 last_change = t
 
-        if not args.noled:
+        if not args.noled and not sleep_mode_enabled():
             update_led_temperature(t)
 
         time.sleep(args.delay)

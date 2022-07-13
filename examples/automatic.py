@@ -167,6 +167,8 @@ try:
 
         if not args.noled and not sleep_mode_enabled():
             update_led_temperature(t)
+        if not args.noled and sleep_mode_enabled():
+            fanshim.set_light(0,0,0)
 
         time.sleep(args.delay)
 except KeyboardInterrupt:
